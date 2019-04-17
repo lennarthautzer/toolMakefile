@@ -1,6 +1,6 @@
 TARGET 			= 	EXECUTABLENAME
-CXX 				= 	g++
-CXXFLAGS 		= 	-g -Wall -Werror
+CC 					= 	gcc
+CFLAGS 			= 	-g -Wall -Werror
 LFLAGS			=		-L../lib
 
 DIRS				=		binaries 	\
@@ -11,9 +11,9 @@ BIN_DIR 		=		./binaries
 OBJ_DIR			=		./objects
 INC_DIR			=		./include
 
-SRCS 				=		$(wildcard $(SRC_DIR)/*.cpp)
+SRCS 				=		$(wildcard $(SRC_DIR)/*.c)
 INCLUDES		=		-I./include
-OBJS 				=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cpp=.o))
+OBJS 				=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.c=.o))
 
 .PHONY: clean
 .PHONY: directories
@@ -22,10 +22,10 @@ OBJS 				=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cpp=.o))
 all: format directories $(BIN_DIR)/$(TARGET)
 
 $(BIN_DIR)/$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LFLAGS)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CCFLAGS) $(INCLUDES) -c $< -o $@
 
 
 
