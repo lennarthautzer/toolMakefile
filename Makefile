@@ -1,18 +1,18 @@
-TARGET 			= 		platformer
-CXX 				= 		g++
-CXXFLAGS 		= 		-g -Wall -Werror
+TARGET 			= 	platformer
+CXX 				= 	g++
+CXXFLAGS 		= 	-g -Wall -Werror
 LFLAGS			=		-L../lib
 
-DIRS				=		binaries \
-							objects	\
+DIRS				=		binaries 	\
+								objects		\
 
 SRC_DIR			=		./source
-BIN_DIR 			=		./binaries
+BIN_DIR 		=		./binaries
 OBJ_DIR			=		./objects
 INC_DIR			=		./include
 
 SRCS 				=		$(wildcard $(SRC_DIR)/*.cpp)
-INCLUDES			=		-I./include
+INCLUDES		=		-I./include
 OBJS 				=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cpp=.o))
 
 .PHONY: clean
