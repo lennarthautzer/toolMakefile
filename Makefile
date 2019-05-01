@@ -1,18 +1,18 @@
-TARGET 			= 	EXECUTABLENAME
-CXX 				= 	g++
-CXXFLAGS 		= 	-g -Wall -Werror
+TARGET 			= 		EXECUTABLENAME
+CXX 				= 		g++
+CXXFLAGS 		= 		-g -Wall -Werror
 LFLAGS			=		-L../lib
 
 DIRS				=		binaries 	\
-								objects		\
+							objects		\
 
 SRC_DIR			=		./source
-BIN_DIR 		=		./binaries
+BIN_DIR 			=		./binaries
 OBJ_DIR			=		./objects
 INC_DIR			=		./include
 
 SRCS 				=		$(wildcard $(SRC_DIR)/*.cpp)
-INCLUDES		=		-I./include
+INCLUDES			=		-I./include
 OBJS 				=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cpp=.o))
 
 .PHONY: clean
@@ -27,16 +27,12 @@ $(BIN_DIR)/$(TARGET): $(OBJS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-
-
 directories: $(DIRS)
 
 $(DIRS):
 	mkdir -p $(DIRS)
 
 format: format.py
-	@echo $(SRCS)
-	@echo $(OBJS)
 	python format.py $(INC_DIR) doClean
 	python format.py $(SRC_DIR) doClean
 
