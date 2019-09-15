@@ -1,6 +1,6 @@
 TARGET 			= 	$(CUR_DIR_NAME).exe
-CC 				= 	g++
-CFLAGS 			= 	-g -Wall -Werror
+CXX 				= 	g++
+CXXFLAGS 		= 	-g -Wall -Werror
 LFLAGS			=	-LC:\MinGW\lib -lmingw32 -static-libgcc -static-libstdc++
 
 DIRS				=		binaries 	\
@@ -32,13 +32,13 @@ cmp: format directories $(BIN_DIR)\$(TARGET)
 
 
 $(BIN_DIR)\$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LFLAGS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 $(BIN_DIR)\$(UPTARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJS) $(UPFLAGS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $(OBJS) $(UPFLAGS)
 
 directories: $(DIRS)
 
