@@ -1,15 +1,43 @@
-To use these Makefiles, open the correct one in a text editor and specify the
-source, header, object and binaries folders at the top of the file, along with
-the target. Makefile is for c++, makefile (lowercase) is for c.
+* Lennart Hautzer
+* 07/12/2019
+* 10 100 5235
+*
+* Copyright (c) 2019 Lennart Hautzer
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
 
-If you wish to use the formatter alongside the makefile, grab it from this link:
 
-https://github.com/lennarthautzer/toolSourceFileFormatter
+Required folder structure:
 
-If you don't wish to use the formatter, simply remove the "format" instruction
-from the "all" rule in the makefile.
+Root Folder
+|-Makfile
+|-source
+    |-.c or .cpp files
+|-include
+    |-.h files
+|-objects (will be generated and contain .o files)
+|-binaries (will be generated and contain the executable file)
 
-Regardless of formatting, the makefile will treat the header directory as an include
-directory for linking; it will load dynamically all the .c/.cpp files in the source
-directory and build objects for each in the objects directory. Finally the "target"
-specified will be built in the binaries directory.
+The default behaviour for these Makefiles is to build a .o object file in the
+to-be-generated "objects" directory for every C or C++ sourcefile it finds in
+the mandatory "source" directory. It will include the entire "include" directory
+when linking the objects from the "objects" directory together.
+
+Make sure to rename the appropriate file to "Makefile" in order for it to
+function as expected!

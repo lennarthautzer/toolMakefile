@@ -1,17 +1,18 @@
 ifeq ($(OS), Windows_NT)
-  RM = CMD /C del /Q /F
-  RRM = CMD /C rmdir /Q /S
-  BACKSLASH := \$(strip)
+  RM 					= 	CMD /C del /Q /F
+  RRM 				= 	CMD /C rmdir /Q /S
+  BACKSLASH 	:= 	\$(strip)
+	LFLAGS			=
 else
-  RM = rm -f
-  RRM = rm -f -r
-	BACKSLASH := /$(strip)
+  RM 					= 	rm -f
+  RRM 				= 	rm -f -r
+	BACKSLASH 	:= 	/$(strip)
+	LFLAGS			=
 endif
 
 TARGET 				= 	$(CUR_DIR_NAME)
-CXX 					= 	g++
-CXXFLAGS 			= 	-g -Wall -Werror
-LFLAGS				=		-static-libgcc -static-libstdc++
+CC 						= 	gcc
+CCFLAGS 			= 	-g -Wall -Werror
 
 DIRS					=		binaries 	\
 									objects		\
@@ -24,37 +25,32 @@ MKF_PTH 			:= 	$(abspath $(lastword $(MAKEFILE_LIST)))
 CUR_DIR				:=	$(strip $(subst Makefile,, $(MKF_PTH)))
 RUN_DIR				:= 	$(addprefix $(CUR_DIR), $(strip $(subst .\,, $(BIN_DIR))))
 CUR_DIR_NAME	:= 	$(notdir $(patsubst %/,%,$(dir $(MKF_PTH))))
-SRCS 					=		$(wildcard $(SRC_DIR)/*.cpp)
+SRCS 					=		$(wildcard $(SRC_DIR)/*.c)
 INCLUDES			=		-I$(INC_DIR)
-OBJS 					=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cpp=.o))
+OBJS 					=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.c=.o))
 
 .PHONY: clean
 .PHONY: directories
-.PHONY: formatting
 .PHONY: run
-.PHONY: depend
-.PHONY: cmp
-.PHONY: rel
+.PHONY: compile
+.PHONY: valgrind
 
 all: directories $(BIN_DIR)/$(TARGET) run
 
-cmp: directories $(BIN_DIR)/$(TARGET)
+compile: directories $(BIN_DIR)/$(TARGET)
 
+valgrind: directories $(BIN_DIR)/$(TARGET) memoryCheck
 
 $(BIN_DIR)/$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LFLAGS)
+	$(CC) $(CCFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CCFLAGS) -MD -MP $(INCLUDES) -c $< -o $@
 
 directories: $(DIRS)
 
 $(DIRS):
 	mkdir $(DIRS)
-
-format: format.py
-	python format.py $(INC_DIR) doClean
-	python format.py $(SRC_DIR) doClean
 
 clean:
 	$(RRM) $(subst /,$(BACKSLASH), $(BIN_DIR))
@@ -63,5 +59,7 @@ clean:
 run:
 	$(RUN_DIR)/$(TARGET)
 
-depend: $(SRCS)
-	makedepend $(INCLUDES) $^
+memoryCheck:
+	valgrind --leak-check=full $(RUN_DIR)/$(TARGET)
+
+-include $(OBJS:.o=.d)
