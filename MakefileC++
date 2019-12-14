@@ -6,18 +6,19 @@ ifeq ($(OS), Windows_NT)
   BACKSLASH   :=  \$(strip)
   LFLAGS			=		-LC:\cygwin64\lib
 	LLIBS				=		-lboost_unit_test_framework
+	BOOST_DIR		=		C:\cygwin64\usr\include
 else
   RM          =   rm -f
   RRM         =   rm -f -r
 	BACKSLASH   :=  /$(strip)
   LFLAGS			=   -L../lib
 	LLIBS				=		-lboost_unit_test_framework
+	BOOST_DIR		=		 /usr/include/boost/
 endif
 
 CXX 					= 	g++
-CXXFLAGS 			= 	-g -Wall -Werror -MD -MP -I$(INC_DIR)
-DIRS					=		binaries 	\
-									objects		\
+CXXFLAGS 			= 	-g -Wall -Werror -MD -MP -I$(INC_DIR) -I$(BOOST_DIR)
+DIRS					=		binaries objects
 SRC_DIR				=		./source
 BIN_DIR 			=		./binaries
 OBJ_DIR				=		./objects

@@ -16,8 +16,7 @@ endif
 
 CC 					  = 	gcc
 CCFLAGS 			= 	-g -Wall -Werror -MD -MP -I$(INC_DIR)
-DIRS					=		binaries 	\
-									objects		\
+DIRS					=		binaries objects
 SRC_DIR				=		./source
 BIN_DIR 			=		./binaries
 OBJ_DIR				=		./objects
