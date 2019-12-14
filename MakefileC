@@ -1,22 +1,23 @@
+TARGET 				= 	$(CUR_DIR_NAME)
+
 ifeq ($(OS), Windows_NT)
-  RM 					= 	CMD /C del /Q /F
-  RRM 				= 	CMD /C rmdir /Q /S
-  BACKSLASH 	:= 	\$(strip)
-	LFLAGS			=
+  RM          =   CMD /C del /Q /F
+  RRM         =   CMD /C rmdir /Q /S
+  BACKSLASH   :=  \$(strip)
+  LFLAGS			=		-LC:\cygwin64\lib
+	LLIBS				=
 else
-  RM 					= 	rm -f
-  RRM 				= 	rm -f -r
-	BACKSLASH 	:= 	/$(strip)
-	LFLAGS			=
+  RM          =   rm -f
+  RRM         =   rm -f -r
+	BACKSLASH   :=  /$(strip)
+  LFLAGS			=   -L../lib
+	LLIBS				=
 endif
 
-TARGET 				= 	$(CUR_DIR_NAME)
-CC 						= 	gcc
-CCFLAGS 			= 	-g -Wall -Werror
-
+CC 					  = 	gcc
+CCFLAGS 			= 	-g -Wall -Werror -MD -MP -I$(INC_DIR)
 DIRS					=		binaries 	\
 									objects		\
-
 SRC_DIR				=		./source
 BIN_DIR 			=		./binaries
 OBJ_DIR				=		./objects
@@ -25,15 +26,18 @@ MKF_PTH 			:= 	$(abspath $(lastword $(MAKEFILE_LIST)))
 CUR_DIR				:=	$(strip $(subst Makefile,, $(MKF_PTH)))
 RUN_DIR				:= 	$(addprefix $(CUR_DIR), $(strip $(subst .\,, $(BIN_DIR))))
 CUR_DIR_NAME	:= 	$(notdir $(patsubst %/,%,$(dir $(MKF_PTH))))
-SRCS 					=		$(wildcard $(SRC_DIR)/*.c)
-INCLUDES			=		-I$(INC_DIR)
-OBJS 					=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.c=.o))
+SRCS 					=		$(wildcard $(SRC_DIR)/*.cpp)
+OBJS 					=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cpp=.o))
 
+.PHONY: all
 .PHONY: clean
 .PHONY: directories
 .PHONY: run
 .PHONY: compile
+.PHONY: console
+.PHONY: runConsoleOutput
 .PHONY: valgrind
+.PHONY: memoryCheck
 
 all: directories $(BIN_DIR)/$(TARGET) run
 
@@ -42,10 +46,10 @@ compile: directories $(BIN_DIR)/$(TARGET)
 valgrind: directories $(BIN_DIR)/$(TARGET) memoryCheck
 
 $(BIN_DIR)/$(TARGET): $(OBJS)
-	$(CC) $(CCFLAGS) $(INCLUDES) -o $@ $(OBJS) $(LFLAGS)
+	$(CC) $(LFLAGS) $^ $(LLIBS) -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CCFLAGS) -MD -MP $(INCLUDES) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CCFLAGS) -c $< -o $@
 
 directories: $(DIRS)
 
