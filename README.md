@@ -26,7 +26,7 @@
 Required folder structure:
 
 Root Folder
-|-Makfile
+|-Makefile
 |-source
     |-.c or .cpp files
 |-include
